@@ -9,7 +9,7 @@ Google published a embedded key/value store engine called LevelDB under BSD lice
 It's a sort of BigTable implementation and could be sit as a core database engine on NoSQL style database service.
 The biggest difference with traditional/other key/value stores like Berkerly DB is that it manages keys in sorted order, this is a greate thing because we can run list operation to get a sorted list of keys along with values that we couldn't so far with other embedded key/value engines, so this feature adds great and great value to LevelDB and make it so suitable to be adopted for NoSQL database service.
 
-LevelDBServer uses LevelDB as a back-end db engine and provides remote server functions.
+LevelDBd uses LevelDB as a back-end db engine and provides remote server functions.
 It provides 2 ways of interface:
 * REST API as a general purpose interface - Any HTTP client library or web browser can be used to communicate.
 * RPC as a programatic interface to maximize the performance. (Not supported yet)
