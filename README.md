@@ -28,6 +28,15 @@ LevelDBCluster is a fault torrent key/value database based on quorum algorithm a
 
 To help understand, simply LevelDBServer is like an individual MySQL server which doesn't provide server level redundancy so if the server fails we loose the data. LevelDBCluster is like a MySQL Cluster that runs many back-end MySQL instances. LevelDBCluster cooperates with many back-end LevelDBServer and provides productionl level rock-solid stability and robustiness along with partitioning feature for infinite scalability. It runs seamlessly regardless of individual server failures. LevelDBCluster is not published yet on the internet but you could contact the author if you're adventerus.
 
+
+### What about Cassandra architecture?
+
+It depends but Cassandra is not really scaling up to a very large scale. Cassandra provides lesser administration cost since there's no partitioning work. Basically Cassandra uses a hash-based ring and distribute rows to corresponding to the host that's owning that particular hash range. So as you add more server, more even distribution you will get. But if you have a really large table, indexes will become a bottle-neck that will drag it down scaling up because you have only a few servers that will store the index. When you send a range or list query on your keys, it only goes to those a fews. If your applicataion only needs exact key match operation, it's perfect but for range and list operation will become a one biggest challenge of managing Cassandra cluster as the number of keys grows. So you'll look for a work-around. So don't be pooled by the benchmark output such as Netflix's that measures only write throughput if you'll need range and list query.
+
+Cassandra is one of beautiful arts in this area but what I'm saying is that you need to understand the both good sides and bad sides. So bad side? It sounds like you'll never need a partitioning technique but just adding new server will make it scale up magically? Wrong. For a really large scale, you'll need to do partitioning on your application level by yourself. That story only works for a small low TPS database.
+
+One opposed architecture of hash-ring is range partitioning, your keys will be stored on specific range of partition. It resolves above scale issue but there'll be a management work on splitting/merging partitions, but the amount of effort will be lesser than you put on Cassandra model if your dataset is really large like Google. Good thing is you have a control of heat partition and it isolates failures. And in this architecture, there's no need of managing indexes separately. So here's LevelDBCluster, partition-based true scale key-value sture..
+
 # REST API service
 
 ## LIST API
