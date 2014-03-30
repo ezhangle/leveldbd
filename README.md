@@ -35,7 +35,7 @@ It depends but Cassandra is not really scaling up to a very large scale. Cassand
 
 Cassandra is one of beautiful arts in this area but what I'm saying is that you need to understand the both good sides and bad sides. So bad side? It sounds like you'll never need a partitioning technique but just adding new server will make it scale up magically? Wrong. For a really large scale, you'll need to do partitioning on your application level by yourself. That story only works for a small low TPS database.
 
-One opposed architecture of hash-ring is range partitioning, your keys will be stored on specific range of partition. It resolves above scale issue but there'll be a management work on splitting/merging partitions, but the amount of effort will be lesser than you put on Cassandra model if your dataset is really large like Google. Good thing is you have a control of heat partition and it isolates failures. And in this architecture, there's no need of managing indexes separately. So here's LevelDBCluster, partition-based true scale key-value sture..
+One opposite architecture of hash-ring is range partitioning, your keys will be stored on specific range of partition. It resolves above scale issue but there'll be a management work on splitting/merging partitions, but the amount of effort will be lesser than you put on Cassandra model if your dataset is really large like Google. Good thing is you have a control of heat partition and it isolates failures. And in this architecture, there's no need of managing indexes separately. So here's LevelDBCluster, partition-based true scale key-value sture..
 
 # REST API service
 
