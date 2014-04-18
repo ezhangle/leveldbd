@@ -1,3 +1,6 @@
+DEV STATUS : IN-PROGRESS OF DEVELOPMENT
+=======================================
+
 leveldbd
 ========
 
