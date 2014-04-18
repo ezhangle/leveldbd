@@ -1,5 +1,5 @@
-DEV STATUS : IN-PROGRESS OF DEVELOPMENT
-=======================================
+IN-PROGRESS OF DEVELOPMENT
+==========================
 
 leveldbd
 ========
