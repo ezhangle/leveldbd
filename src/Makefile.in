@@ -1,0 +1,113 @@
+###############################################################################
+## leveldbd
+##
+## Copyright (c) 2014 Seungyoung Kim.
+## All rights reserved.
+##
+## leveldbd is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## leveldbd is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with leveldbd. If not, see <http://www.gnu.org/licenses/>.
+###############################################################################
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+
+## Utilities
+AR		= @AR@
+ARFLAGS		= -rc
+CHMOD		= @CHMOD@
+INSTALL		= @INSTALL@
+INSTALL_DATA	= @INSTALL_DATA@
+LN_S		= @LN_S@
+MKDIR_P		= @MKDIR_P@
+RMDIR		= rmdir
+RANLIB		= @RANLIB@
+RM		= @RM@
+
+## Install directories
+INST_INCDIR	= @includedir@
+INST_LIBDIR	= @libdir@
+
+## libasyncd related.
+LIBASYNCD_DIR	= ../lib/libasyncd
+LIBASYNCD_LIB	= $(LIBASYNCD_DIR)/src/libasyncd.a
+CPPFLAGS	+= -I$(LIBASYNCD_DIR)/include
+LIBS		+= $(LIBASYNCD_LIB)
+
+## qlibc related.
+QLIBC_DIR	= $(LIBASYNCD_DIR)/lib/qlibc
+QLIBC_LIB	= $(QLIBC_DIR)/lib/libqlibc.a
+CPPFLAGS	+= -I$(QLIBC_DIR)/include
+LIBS		+= $(QLIBC_LIB)
+
+## leveldb related.
+LEVELDB_DIR	= ../lib/leveldb
+LEVELDB_LIB	= $(LEVELDB_DIR)/libleveldb.a
+CPPFLAGS	+= -I$(LEVELDB_DIR)/include
+LIBS		+= $(LEVELDB_LIB)
+
+## libasyncd related.
+HEADERDIR	= ../include/asyncd
+CPPFLAGS	+= -I$(HEADERDIR)
+OBJS		= leveldbd.o
+PRGNAME		= leveldbd
+
+## Which compiler & options for release
+CC		= gcc -std=gnu99
+CFLAGS		= -Wall -g -O2
+CPPFLAGS	+=  -I/usr/include -I/usr/local/include \
+		   -D_GNU_SOURCE -DBUILD_DEBUG 
+LIBS		+= @DEPLIBS@
+
+## Make Library
+all: libasyncd leveldb $(PRGNAME)
+
+$(PRGNAME): $(OBJS)
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+
+libasyncd:
+	@if [ ! -d $(LIBASYNCD_DIR)/src ]; then \
+		../lib/run2init-submodules.sh; \
+	fi
+	@if [ ! -f $(LIBASYNCD_LIB) ]; then \
+		(cd $(LIBASYNCD_DIR); ./configure; make); \
+	fi
+
+leveldb:
+	@if [ ! -d $(LEVELDB_DIR)/db ]; then \
+		../lib/run2init-submodules.sh; \
+	fi
+	@if [ ! -f $(LEVELDB_LIB) ]; then \
+		(cd $(LEVELDB_DIR); make); \
+	fi
+
+install:
+
+deinstall: uninstall
+uninstall:
+
+clean:
+	$(RM) -f $(OBJS) $(PRGNAME)
+
+doc:
+	doxygen doxygen.conf
+
+cleandoc:
+	$(RM) -rf ../doc/html
+
+## Compile
+.c.o:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+.cc.o:
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+	

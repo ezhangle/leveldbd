@@ -1,0 +1,6 @@
+[submodule "lib/leveldb"]
+	path = lib/leveldb
+	url = https://code.google.com/p/leveldb/
+[submodule "lib/libasyncd"]
+	path = lib/libasyncd
+	url = https://github.com/wolkykim/libasyncd
